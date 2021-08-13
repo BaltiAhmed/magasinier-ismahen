@@ -52,7 +52,7 @@ function AjoutCommande() {
       setPrix(e.target.value);
     } else {
       setFournisseur(e.target.value);
-      setProduit([])
+      setProduit([ ])
     }
   };
 
@@ -108,7 +108,6 @@ function AjoutCommande() {
         if (!response.ok) {
           throw new Error(responsedata.message);
         }
-        setsuccess("Produit bien ajouter");
       } catch (err) {
         console.log(err);
         seterror(err.message || "probleme!!");
@@ -141,7 +140,8 @@ function AjoutCommande() {
       }
       let id = responsedata.commandeExterne._id
       ajoutProduixexterne(id)
-      setsuccess("Produit bien ajouter");
+      setsuccess("Commande bien ajouter");
+      setProduit([])
     } catch (err) {
       console.log(err);
       seterror(err.message || "probleme!!");
