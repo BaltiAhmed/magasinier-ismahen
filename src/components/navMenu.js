@@ -25,6 +25,10 @@ function NavMenu() {
         <Link to="/facture" style={{textDecoration:'none'}}>
         <Nav.Link href="/facture">Nos factures</Nav.Link>
         </Link>
+
+        <Link to="/commande" style={{textDecoration:'none'}}>
+        <Nav.Link href="/commande">Commande interne</Nav.Link>
+        </Link>
         
       </Nav>
       <Button variant="light" onClick={()=>logout()}>Logout</Button>

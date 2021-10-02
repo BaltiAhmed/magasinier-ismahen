@@ -9,6 +9,7 @@ import AjoutProduit from "./pages/ajoutProduit";
 import UpdateProduit from "./pages/updateProduit";
 import AjoutCommande from "./pages/commande/ajout-commande";
 import Facture from "./pages/facture";
+import ListCommande from "./pages/list-commnades";
 
 function App() {
   const { userId, token, login, logout } = UserAuth();
@@ -22,6 +23,7 @@ function App() {
         <Route path="/modifier/:id" component={UpdateProduit} />
         <Route path="/ajout-commande" component={AjoutCommande} />
         <Route path="/facture" component={Facture} />
+        <Route path="/commande" component={ListCommande} />
       </React.Fragment>
     );
   } else {
