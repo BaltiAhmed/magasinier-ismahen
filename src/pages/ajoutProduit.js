@@ -1,10 +1,31 @@
-import { useState, useContext } from "react";
+import { useState, useContext,useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { Authcontext } from "../context/auth-context";
 import ErrorModel from "../models/error-models";
 import SuccessModel from "../models/success-models";
 
 function AjoutProduit() {
+  const [list, setlist] = useState();
+  useEffect(() => {
+    const sendRequest = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/api/fournisseur/`);
+
+        const responseData = await response.json();
+        if (!response.ok) {
+          throw new Error(responseData.message);
+        }
+
+        setlist(responseData.fournisseur);
+      } catch (err) {
+        seterror(err.message);
+      }
+    };
+
+    sendRequest();
+  }, []);
+
+
   const [name, setName] = useState();
   const [categorie, setCategorie] = useState();
   const [poid, setPois] = useState();
@@ -20,7 +41,13 @@ function AjoutProduit() {
     } else if (e.target.name === "categorie") {
       setCategorie(e.target.value);
     } else if (e.target.name === "poid") {
-      setPois(e.target.value);
+      if(e.target.value < 1 || e.target.value > 100){
+        seterror("Pois invalid!")
+      }else{
+        setPois(e.target.value);
+        seterror(null)
+      }
+      
     } else if (e.target.name === "date") {
       setDate(e.target.value);
     } else if (e.target.name === "quantite") {
@@ -101,6 +128,7 @@ function AjoutProduit() {
                 <Form.Control
                   placeholder="poid net"
                   name="poid"
+                  type="number"
                   onChange={onchange}
                   required
                 />
@@ -139,8 +167,10 @@ function AjoutProduit() {
                   onChange={onchange}
                   required
                 >
-                  <option></option>
-                  <option>Default select</option>
+                  {list &&
+                    list.map((row) => (
+                      <option value={row._id}>{row.name}</option>
+                    ))}
                 </Form.Control>{" "}
               </Form.Group>
 

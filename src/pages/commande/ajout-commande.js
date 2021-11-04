@@ -43,7 +43,12 @@ function AjoutCommande() {
     } else if (e.target.name === "categorie") {
       setCategorie(e.target.value);
     } else if (e.target.name === "poid") {
-      setPois(e.target.value);
+      if(e.target.value < 1 || e.target.value > 100){
+        seterror("Pois invalid!")
+      }else{
+        setPois(e.target.value);
+        seterror(null)
+      }
     } else if (e.target.name === "date") {
       setDate(e.target.value);
     } else if (e.target.name === "quantite") {

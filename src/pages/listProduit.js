@@ -4,6 +4,10 @@ import ErrorModel from "../models/error-models";
 import SuccessModel from "../models/success-models";
 import { Link } from "react-router-dom";
 import TablePagination from "@material-ui/core/TablePagination";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import SearchIcon from "@material-ui/icons/Search";
+import Input from "@material-ui/core/Input";
+import FournisseurDetail from "../components/fournisseur";
 
 function ListProduit() {
   const [list, setList] = useState();
@@ -42,6 +46,12 @@ function ListProduit() {
 
   console.log(list);
 
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handelSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
   return (
     <div style={{ marginTop: "5%" }}>
       <Container>
@@ -50,6 +60,17 @@ function ListProduit() {
           <Col xs={10}>
             <ErrorModel error={error} />
             <SuccessModel success={success} />
+            <div style={{ marginLeft: "80%" }}>
+              <Input
+                id="input-with-icon-adornment"
+                startAdornment={
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                }
+                onChange={handelSearch}
+              />
+            </div>
             <Table striped bordered hover>
               <thead>
                 <tr>
@@ -66,13 +87,22 @@ function ListProduit() {
               <tbody>
                 {list &&
                   list
+                    .filter((row) => {
+                      if (searchTerm == "") {
+                        return list;
+                      } else if (row.name.includes(searchTerm)) {
+                        return row;
+                      }
+                    })
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((item, index) => (
                       <tr>
                         <td>{index + 1}</td>
                         <td>{item.name}</td>
                         <td>{item.categorie}</td>
-                        <td>{item.founisseur}</td>
+
+                        <td><FournisseurDetail id={item.founisseur} /></td>
+
                         <td>{item.poidsNet}</td>
                         <td>{item.quantite}</td>
                         <td>{item.dateFb}</td>

@@ -1,11 +1,52 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { Authcontext } from "../context/auth-context";
 import ErrorModel from "../models/error-models";
 import SuccessModel from "../models/success-models";
-import {useParams} from 'react-router-dom'
+import { useParams } from "react-router-dom";
 
 function UpdateProduit() {
+  const [list, setlist] = useState();
+  useEffect(() => {
+    const sendRequest = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/api/produit/${id}`);
+
+        const responseData = await response.json();
+        if (!response.ok) {
+          throw new Error(responseData.message);
+        }
+
+        setName(responseData.produit.name);
+        setCategorie(responseData.produit.categorie);
+        setPois(responseData.produit.poidsNet);
+        setDate(responseData.produit.dateFb);
+        setQuantite(responseData.produit.quantite);
+        setFournisseur(responseData.produit.founisseur);
+      } catch (err) {
+        seterror(err.message);
+      }
+    };
+
+    sendRequest();
+
+    const sendRequest1 = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/api/fournisseur/`);
+
+        const responseData = await response.json();
+        if (!response.ok) {
+          throw new Error(responseData.message);
+        }
+
+        setlist(responseData.fournisseur);
+      } catch (err) {
+        seterror(err.message);
+      }
+    };
+
+    sendRequest1();
+  }, []);
   const [name, setName] = useState();
   const [categorie, setCategorie] = useState();
   const [poid, setPois] = useState();
@@ -21,7 +62,12 @@ function UpdateProduit() {
     } else if (e.target.name === "categorie") {
       setCategorie(e.target.value);
     } else if (e.target.name === "poid") {
-      setPois(e.target.value);
+      if (e.target.value < 1 || e.target.value > 100) {
+        seterror("Pois invalid!");
+      } else {
+        setPois(e.target.value);
+        seterror(null);
+      }
     } else if (e.target.name === "date") {
       setDate(e.target.value);
     } else if (e.target.name === "quantite") {
@@ -57,8 +103,7 @@ function UpdateProduit() {
       if (!response.ok) {
         throw new Error(responsedata.message);
       }
-      setsuccess('Produit bien modifier')
-     
+      setsuccess("Produit bien modifier");
     } catch (err) {
       console.log(err);
       seterror(err.message || "probleme!!");
@@ -78,6 +123,7 @@ function UpdateProduit() {
                 <Form.Group as={Col} controlId="formGridEmail">
                   <Form.Label>name</Form.Label>
                   <Form.Control
+                    value={name}
                     type="text"
                     placeholder="name"
                     name="name"
@@ -89,6 +135,7 @@ function UpdateProduit() {
                 <Form.Group as={Col} controlId="formGridPassword">
                   <Form.Label>catégorie</Form.Label>
                   <Form.Control
+                    value={categorie}
                     type="text"
                     placeholder="catégorie"
                     name="categorie"
@@ -101,6 +148,7 @@ function UpdateProduit() {
               <Form.Group controlId="formGridAddress1">
                 <Form.Label>poid net</Form.Label>
                 <Form.Control
+                  value={poid}
                   placeholder="poid net"
                   name="poid"
                   onChange={onchange}
@@ -112,6 +160,7 @@ function UpdateProduit() {
                 <Form.Label> Date de fabrication </Form.Label>
                 <br></br>
                 <input
+                  value={date}
                   type="date"
                   id="start"
                   name="date"
@@ -126,6 +175,7 @@ function UpdateProduit() {
               <Form.Group controlId="formGridAddress1">
                 <Form.Label>Quantité</Form.Label>
                 <Form.Control
+                  value={quantite}
                   placeholder="Quantité"
                   name="quantite"
                   onChange={onchange}
@@ -136,13 +186,16 @@ function UpdateProduit() {
               <Form.Group controlId="formGridAddress1">
                 <Form.Label>Founisseur</Form.Label>
                 <Form.Control
+                  value={fournisseur}
                   as="select"
                   name="fournisseur"
                   onChange={onchange}
                   required
                 >
-                  <option></option>
-                  <option>Default select</option>
+                  {list &&
+                    list.map((row) => (
+                      <option value={row._id}>{row.name}</option>
+                    ))}
                 </Form.Control>{" "}
               </Form.Group>
 
