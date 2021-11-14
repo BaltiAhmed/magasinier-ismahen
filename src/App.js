@@ -10,6 +10,7 @@ import UpdateProduit from "./pages/updateProduit";
 import AjoutCommande from "./pages/commande/ajout-commande";
 import Facture from "./pages/facture";
 import ListCommande from "./pages/list-commnades";
+import ListeCategorie from "./pages/categorie/listCategorie";
 
 function App() {
   const { userId, token, login, logout } = UserAuth();
@@ -24,6 +25,7 @@ function App() {
         <Route path="/ajout-commande" component={AjoutCommande} />
         <Route path="/facture" component={Facture} />
         <Route path="/commande" component={ListCommande} />
+        <Route path="/categorie" component={ListeCategorie} />
       </React.Fragment>
     );
   } else {

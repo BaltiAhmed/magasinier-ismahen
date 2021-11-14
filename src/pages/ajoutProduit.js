@@ -1,4 +1,4 @@
-import { useState, useContext,useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { Authcontext } from "../context/auth-context";
 import ErrorModel from "../models/error-models";
@@ -25,7 +25,6 @@ function AjoutProduit() {
     sendRequest();
   }, []);
 
-
   const [name, setName] = useState();
   const [categorie, setCategorie] = useState();
   const [poid, setPois] = useState();
@@ -41,13 +40,12 @@ function AjoutProduit() {
     } else if (e.target.name === "categorie") {
       setCategorie(e.target.value);
     } else if (e.target.name === "poid") {
-      if(e.target.value < 1 || e.target.value > 100){
-        seterror("Pois invalid!")
-      }else{
+      if (e.target.value < 1 || e.target.value > 100) {
+        seterror("Pois invalid!");
+      } else {
         setPois(e.target.value);
-        seterror(null)
+        seterror(null);
       }
-      
     } else if (e.target.name === "date") {
       setDate(e.target.value);
     } else if (e.target.name === "quantite") {
@@ -56,6 +54,27 @@ function AjoutProduit() {
       setFournisseur(e.target.value);
     }
   };
+
+  const [listCategorie, setListCategorie] = useState();
+
+  useEffect(() => {
+    const sendRequest = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/api/categorie/`);
+
+        const responseData = await response.json();
+        if (!response.ok) {
+          throw new Error(responseData.message);
+        }
+
+        setListCategorie(responseData.existingCategorie);
+      } catch (err) {
+        seterror(err.message);
+      }
+    };
+
+    sendRequest();
+  }, []);
 
   const auth = useContext(Authcontext);
 
@@ -82,8 +101,7 @@ function AjoutProduit() {
       if (!response.ok) {
         throw new Error(responsedata.message);
       }
-      setsuccess('Produit bien ajouter')
-     
+      setsuccess("Produit bien ajouter");
     } catch (err) {
       console.log(err);
       seterror(err.message || "probleme!!");
@@ -114,12 +132,16 @@ function AjoutProduit() {
                 <Form.Group as={Col} controlId="formGridPassword">
                   <Form.Label>catégorie</Form.Label>
                   <Form.Control
-                    type="text"
-                    placeholder="catégorie"
+                    as="select"
                     name="categorie"
                     onChange={onchange}
                     required
-                  />
+                  >
+                    {listCategorie &&
+                      listCategorie.map((row) => (
+                        <option value={row.nom}>{row.nom}</option>
+                      ))}
+                  </Form.Control>
                 </Form.Group>
               </Form.Row>
 
