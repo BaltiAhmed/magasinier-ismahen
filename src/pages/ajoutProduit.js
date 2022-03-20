@@ -25,6 +25,7 @@ function AjoutProduit() {
     sendRequest();
   }, []);
 
+  const [ref, setRef] = useState();
   const [name, setName] = useState();
   const [categorie, setCategorie] = useState();
   const [poid, setPois] = useState();
@@ -50,6 +51,8 @@ function AjoutProduit() {
       setDate(e.target.value);
     } else if (e.target.name === "quantite") {
       setQuantite(e.target.value);
+    } else if (e.target.name === "ref") {
+      setRef(e.target.value);
     } else {
       setFournisseur(e.target.value);
     }
@@ -88,6 +91,7 @@ function AjoutProduit() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          ref: ref,
           name: name,
           categorie: categorie,
           poidsNet: poid,
@@ -118,6 +122,17 @@ function AjoutProduit() {
             <SuccessModel success={success} />
             <Form onSubmit={submit}>
               <Form.Row>
+                <Form.Group as={Col} controlId="formGridEmail">
+                  <Form.Label>Référence</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Référence"
+                    name="ref"
+                    onChange={onchange}
+                    required
+                  />
+                </Form.Group>
+
                 <Form.Group as={Col} controlId="formGridEmail">
                   <Form.Label>name</Form.Label>
                   <Form.Control

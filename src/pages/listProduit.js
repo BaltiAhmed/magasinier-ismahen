@@ -75,6 +75,7 @@ function ListProduit() {
               <thead>
                 <tr>
                   <th>#</th>
+                  <th>référence</th>
                   <th>nom</th>
                   <th>categorie</th>
                   <th>founisseur</th>
@@ -98,6 +99,7 @@ function ListProduit() {
                     .map((item, index) => (
                       <tr>
                         <td>{index + 1}</td>
+                        <td>{item.ref}</td>
                         <td>{item.name}</td>
                         <td>{item.categorie}</td>
 
