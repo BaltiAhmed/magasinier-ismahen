@@ -53,7 +53,7 @@ function AjoutProduit() {
       setQuantite(e.target.value);
     } else if (e.target.name === "ref") {
       setRef(e.target.value);
-    } else {
+    } else if (e.target.name === "fournisseur") {
       setFournisseur(e.target.value);
     }
   };
@@ -204,6 +204,7 @@ function AjoutProduit() {
                   onChange={onchange}
                   required
                 >
+                  <option ></option>
                   {list &&
                     list.map((row) => (
                       <option value={row._id}>{row.name}</option>
