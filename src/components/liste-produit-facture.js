@@ -25,6 +25,7 @@ function MyVerticallyCenteredModal(props) {
     sendRequest();
   }, [props.id]);
   console.log(list);
+  console.log(props.id);
 
   return (
     <Modal

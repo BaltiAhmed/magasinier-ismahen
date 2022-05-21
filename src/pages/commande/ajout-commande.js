@@ -85,6 +85,7 @@ function AjoutCommande() {
     setPrixTotal(prixTotal + parseInt(p.prix, 10));
     console.log(p.categorie);
     console.log(prixTotal);
+    console.log(produit);
   };
 
   const ajoutProduixexterne = async (id) => {
